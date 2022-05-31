@@ -1,0 +1,16 @@
+{
+    "name": "gdidentity/c-purge-cache",
+    "type": "wordpress-plugin",
+    "autoload": {
+        "psr-4": {
+            "CPurgeCache\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "GD IDENTITY",
+            "email": "jakub.bebjak@gdidentity.sk"
+        }
+    ],
+    "require": {}
+}
