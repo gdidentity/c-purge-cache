@@ -3,6 +3,7 @@
 namespace CPurgeCache;
 
 use CPurgeCache\Purge;
+use CPurgeCache\Settings;
 
 class Admin
 {
@@ -107,7 +108,7 @@ class Admin
                     $field = 'purge_everything';
                     $option = get_option(self::$option);
                     echo '<p><a id="c-purge-cache-everything-settings" class="button button-primary" style="margin-bottom: 15px;">Purge All Cache</a></p>';
-                    echo '<input type="checkbox" id="'.$field.'" name="'.self::$option.'['.$field.']" value="1"' . checked('1', $option[$field], false) . '/>';
+                    echo '<input type="checkbox" id="'.$field.'" name="'.self::$option.'['.$field.']" value="1"' . checked('1', isset($option[$field]), false) . '/>';
                     echo '<label for="'.$field.'">Show <b>Purge All Cache</b> button in admin bar</label>';
                 },
                 self::$option,
@@ -119,7 +120,7 @@ class Admin
                 function () {
                     $field = 'purge_everything_endpoint';
                     $option = get_option(self::$option);
-                    echo '<input type="checkbox" id="'.$field.'" name="'.self::$option.'['.$field.']" value="1"' . checked('1', $option[$field], false) . '/>';
+                    echo '<input type="checkbox" id="'.$field.'" name="'.self::$option.'['.$field.']" value="1"' . checked('1', isset($option[$field]), false) . '/>';
                     echo '<label for="'.$field.'">Allow WP REST API endpoint for Purge Everything</label>';
                     $apiUrl = rest_url('cpc/v1/purge');
                     $secret = $option['purge_everything_secret'];
@@ -155,7 +156,7 @@ class Admin
                 function () {
                     $field = 'purge_home_url';
                     $option = get_option(self::$option);
-                    echo '<input type="checkbox" id="'.$field.'" name="'.self::$option.'['.$field.']" value="1"' . checked('1', $option[$field], false) . '/>';
+                    echo '<input type="checkbox" id="'.$field.'" name="'.self::$option.'['.$field.']" value="1"' . checked('1', isset($option[$field]), false) . '/>';
                     echo '<label for="'.$field.'">Purge Homepage URL on post update</label>';
                 },
                 self::$option,
@@ -167,7 +168,7 @@ class Admin
                 function () {
                     $field = 'purge_everything_on_update';
                     $option = get_option(self::$option);
-                    echo '<input type="checkbox" id="'.$field.'" name="'.self::$option.'['.$field.']" value="1"' . checked('1', $option[$field], false) . '/>';
+                    echo '<input type="checkbox" id="'.$field.'" name="'.self::$option.'['.$field.']" value="1"' . checked('1', isset($option[$field]), false) . '/>';
                     echo '<label for="'.$field.'">Purge Everything on post update</label>';
                 },
                 self::$option,

@@ -10,4 +10,9 @@ class Settings
     {
         return get_option(self::$optionName);
     }
+
+    public static function checked($field)
+    {
+        return isset($field);
+    }
 }

@@ -16,7 +16,11 @@ class Purge
                 return;
             }
 
-            self::purge(!Settings::get()['purge_everything_on_update'] ? $post_ID : '');
+            self::purge(!isset(Settings::get()['purge_everything_on_update']) ? $post_ID : '');
+        }, 10, 3);
+
+        add_action('transition_post_status', function ($new_status, $old_status, $post) {
+            self::purge(!isset(Settings::get()['purge_everything_on_update']) ? $post->ID : '');
         }, 10, 3);
     }
 
@@ -38,7 +42,7 @@ class Purge
                 $files[] = substr($pageUrl, -1) == '/' ? substr($pageUrl, 0, -1) : $pageUrl;
             }
 
-            if (!empty($settings['purge_home_url'])) {
+            if (isset($settings['purge_home_url'])) {
                 $files[] = trim($settings['frontend_url']);
             }
 
@@ -91,7 +95,7 @@ class Purge
     {
         $settings = Settings::get();
 
-        if (!empty($settings['purge_everything'])) {
+        if (isset($settings['purge_everything'])) {
             add_action('admin_bar_menu', function ($admin_bar) {
                 global $pagenow;
                 $admin_bar->add_menu([

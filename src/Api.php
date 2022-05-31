@@ -17,7 +17,7 @@ class Api
             $namespace = 'cpc/v1';
             $settings = Settings::get();
 
-            if ($settings['purge_everything_endpoint']) {
+            if (isset($settings['purge_everything_endpoint'])) {
                 register_rest_route($namespace, 'purge', [
                 'methods'   => WP_REST_Server::EDITABLE,
                 'permission_callback' =>  function () {
