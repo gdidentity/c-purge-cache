@@ -16,12 +16,16 @@ class Purge
                 return;
             }
 
-            self::purge(!isset(Settings::get()['purge_everything_on_update']) ? $post_ID : '');
-        }, 10, 3);
+            wp_schedule_single_event(time(), 'c_purge_cache_on_post_update', [$post_ID]);
+        }, 100, 3);
 
         add_action('transition_post_status', function ($new_status, $old_status, $post) {
-            self::purge(!isset(Settings::get()['purge_everything_on_update']) ? $post->ID : '');
-        }, 10, 3);
+            wp_schedule_single_event(time(), 'c_purge_cache_on_post_update', [$post->ID]);
+        }, 100, 3);
+
+        add_action('c_purge_cache_on_post_update', function ($postId) {
+            self::purge(!isset(Settings::get()['purge_everything_on_update']) ? $postId : '');
+        }, 10, 1);
     }
 
     public static function purge($postId= '')
