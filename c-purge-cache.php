@@ -200,7 +200,7 @@ if ( ! class_exists( 'CPurgeCache' ) ) :
 		 * @since 0.0.1
 		 */
 		private function preload(): void {
-			\CPurgeCache\Preload::init();
+			// \CPurgeCache\Preload::init();
 		}
 
 		/**
