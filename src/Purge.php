@@ -75,16 +75,16 @@ class Purge {
 
 		$body = json_decode( wp_remote_retrieve_body( $response ), true );
 
-		$response_data = $body ?? null;
+		$response_data = ( ! is_wp_error( $response ) ) ? $body : null;
 
 		if ( ! $response_data['success'] ) {
 			$error = $response_data['errors'][0];
 			return new WP_Error( 'cloudflare_error', $error['message'], [ 'status' => $error['code'] ] );
 		}
 
-		if ( $files ) {
-			Preload::preload( $files );
-		}
+		// if ( $files ) {
+		// 	Preload::preload( $files );
+		// }
 
 		$purged = $files ? implode( ', ', $files ) : 'everything';
 
