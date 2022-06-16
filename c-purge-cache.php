@@ -5,7 +5,7 @@
  * Plugin Name:         Purge Cache
  * Plugin URI:          https://github.com/gdidentity/c-purge-cache
  * GitHub Plugin URI:   https://github.com/gdidentity/c-purge-cache
- * Description:         Purge Cloudflare URL cache on the post update, purge specific URLs on the post update, Purge Everything button.
+ * Description:         Purge Cloudflare Cache of the Post with additional URLs on the Post update, Purge Everything button.
  * Version:             1.0.0
  * Author:              GD IDENTITY
  * Author URI:          https://gdidentity.sk

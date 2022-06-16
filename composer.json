@@ -1,6 +1,7 @@
 {
     "name": "gdidentity/c-purge-cache",
     "type": "wordpress-plugin",
+    "license": "GPL-3.0-or-later",
     "autoload": {
         "psr-4": {
             "CPurgeCache\\": "src/"
