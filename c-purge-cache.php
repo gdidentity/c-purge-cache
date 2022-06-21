@@ -3,7 +3,7 @@
  * Cloudflare Purge Cache
  *
  * Plugin Name:         Purge Cache
- * Plugin URI:          https://github.com/gdidentity/c-purge-cache
+ * Plugin URI:          https://wordpress.org/plugins/c-purge-cache
  * GitHub Plugin URI:   https://github.com/gdidentity/c-purge-cache
  * Description:         Purge Cloudflare Cache of the Post with additional URLs on the Post update, Purge Everything button.
  * Version:             1.0.0

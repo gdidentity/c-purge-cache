@@ -14,6 +14,8 @@ Purge Cloudflare Cache of the Post with additional URLs on the Post update, Purg
 
 Plugin requires Cloudflare account.
 
+Feel free to create PR to [plugin Github repo](https://github.com/gdidentity/c-purge-cache).
+
 == Installation ==
 
 1. Search for the plugin in WordPress under "Plugins -> Add New".
