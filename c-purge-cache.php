@@ -6,7 +6,7 @@
  * Plugin URI:          https://wordpress.org/plugins/c-purge-cache
  * GitHub Plugin URI:   https://github.com/gdidentity/c-purge-cache
  * Description:         Purge Cloudflare Cache of the Post with additional URLs on the Post update, Purge Everything button.
- * Version:             1.0.0
+ * Version:             1.0.1
  * Author:              GD IDENTITY
  * Author URI:          https://gdidentity.sk
  * Text Domain:         c-purge-cache
@@ -117,7 +117,7 @@ if ( ! class_exists( 'CPurgeCache' ) ) :
 
 			// Plugin version.
 			if ( ! defined( 'CPURGECACHE_VERSION' ) ) {
-				define( 'CPURGECACHE_VERSION', '1.0.0' );
+				define( 'CPURGECACHE_VERSION', '1.0.1' );
 			}
 
 			// Plugin Folder Path.
