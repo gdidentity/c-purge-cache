@@ -39,15 +39,15 @@ class Purge {
 		$data = [ 'purge_everything' => true ];
 
 		if ( $post_id ) {
-			$files    = [];
+			$urls     = [];
 			$page_url = str_replace( get_site_url(), trim( $frontend_url ), get_permalink( $post_id ) );
 
 			if ( filter_var( $page_url, FILTER_VALIDATE_URL ) ) {
-				$files[] = substr( $page_url, -1 ) === '/' ? substr( $page_url, 0, -1 ) : $page_url;
+				$urls[] = substr( $page_url, -1 ) === '/' ? substr( $page_url, 0, -1 ) : $page_url;
 			}
 
 			if ( isset( $settings['purge_home_url'] ) ) {
-				$files[] = trim( $frontend_url );
+				$urls[] = trim( $frontend_url );
 			}
 
 			$purge_urls = trim( Settings::get( 'purge_urls', '', 'c_purge_cache_post_update_settings' ) );
@@ -57,12 +57,14 @@ class Purge {
 			if ( $purge_urls ) {
 				foreach ( $purge_urls as $url ) {
 					if ( filter_var( $url, FILTER_VALIDATE_URL ) ) {
-						$files[] = $url;
+						$urls[] = $url;
 					}
 				}
 			}
 
-			$data = [ 'files' => $files ];
+			$urls = apply_filters( 'c_purge_cache_urls', $urls, $post_id );
+
+			$data = [ 'files' => $urls ];
 		}
 
 		$response = wp_remote_post( "https://api.cloudflare.com/client/v4/zones/$zone_id/purge_cache", [
@@ -82,11 +84,11 @@ class Purge {
 			return new WP_Error( 'cloudflare_error', $error['message'], [ 'status' => $error['code'] ] );
 		}
 
-		// if ( $files ) {
-		// 	Preload::preload( $files );
+		// if ( $urls ) {
+		// 	Preload::preload( $urls );
 		// }
 
-		$purged = $files ? implode( ', ', $files ) : 'everything';
+		$purged = $urls ? implode( ', ', $urls ) : 'everything';
 
 		return (object) [
 			'success' => $response_data['success'],
