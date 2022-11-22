@@ -10,24 +10,27 @@ use WP_Error;
 class Purge {
 
 	public static function init() {
-		add_action('wp_insert_post', function ( $post_ID, $post, $update ) {
-			if ( wp_is_post_revision( $post_ID ) ) {
-				return;
-			}
+		if ( ! class_exists( 'OnDemandRevalidation' ) ) {
+			add_action('wp_insert_post', function ( $post_ID, $post, $update ) {
+				if ( wp_is_post_revision( $post_ID ) ) {
+					return;
+				}
 
-			wp_schedule_single_event( time(), 'c_purge_cache_on_post_update', [ $post_ID ] );
-		}, 100, 3);
+				wp_schedule_single_event( time(), 'c_purge_cache_on_post_update', [ $post_ID ] );
+			}, 100, 3);
 
-		add_action('transition_post_status', function ( $new_status, $old_status, $post ) {
-			wp_schedule_single_event( time(), 'c_purge_cache_on_post_update', [ $post->ID ] );
-		}, 100, 3);
+			add_action('transition_post_status', function ( $new_status, $old_status, $post ) {
+				wp_schedule_single_event( time(), 'c_purge_cache_on_post_update', [ $post->ID ] );
+			}, 100, 3);
 
-		add_action('c_purge_cache_on_post_update', function ( $post_id ) {
-			self::purge( ! ( Settings::get( 'purge_everything', 'on', 'c_purge_cache_post_update_settings' ) === 'on' ) ? $post_id : '' );
-		}, 10, 1);
+			add_action('c_purge_cache_on_post_update', function ( $post_id ) {
+				$post = get_post( $post_id );
+				self::purge( ! ( Settings::get( 'purge_everything', 'on', 'c_purge_cache_post_update_settings' ) === 'on' ) ? $post : '' );
+			}, 10, 1);
+		}
 	}
 
-	public static function purge( $post_id = '' ) {
+	public static function purge( $post = null ) {
 		$zone_id      = Settings::get( 'zone_id' );
 		$api_token    = Settings::get( 'api_token' );
 		$frontend_url = Settings::get( 'frontend_url' );
@@ -38,9 +41,9 @@ class Purge {
 
 		$data = [ 'purge_everything' => true ];
 
-		if ( $post_id ) {
+		if ( $post->ID ) {
 			$urls     = [];
-			$page_url = str_replace( get_site_url(), trim( $frontend_url ), get_permalink( $post_id ) );
+			$page_url = str_replace( get_site_url(), trim( $frontend_url ), get_permalink( $post->ID ) );
 
 			if ( filter_var( $page_url, FILTER_VALIDATE_URL ) ) {
 				$urls[] = substr( $page_url, -1 ) === '/' ? substr( $page_url, 0, -1 ) : $page_url;
@@ -52,7 +55,7 @@ class Purge {
 
 			$purge_urls = trim( Settings::get( 'purge_urls', '', 'c_purge_cache_post_update_settings' ) );
 			$purge_urls = preg_split( '/\r\n|\n|\r/', $purge_urls );
-			$purge_urls = Helpers::rewriteUrls( $purge_urls, $post_id );
+			$purge_urls = Helpers::rewriteUrls( $purge_urls, $post );
 
 			if ( $purge_urls ) {
 				foreach ( $purge_urls as $url ) {
@@ -62,7 +65,7 @@ class Purge {
 				}
 			}
 
-			$urls = apply_filters( 'c_purge_cache_urls', $urls, $post_id );
+			$urls = apply_filters( 'c_purge_cache_urls', $urls, $post );
 
 			$data = [ 'files' => $urls ];
 		}
@@ -160,11 +163,11 @@ class Purge {
 				$response = new WP_Error( 'rest_forbidden', __( 'You cannot edit posts.', 'c-purge-cache' ), [ 'status' => 401 ] );
 			}
 
-			$latest_post_id = get_posts([
+			$latest_post = get_posts([
 				'numberposts' => 1,
 				'post_status' => 'publish',
-			])[0]->ID;
-			$response       = self::purge( $latest_post_id );
+			])[0];
+			$response    = self::purge( $latest_post );
 
 			wp_send_json( $response );
 			wp_die();
