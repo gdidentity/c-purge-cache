@@ -25,7 +25,7 @@ class Purge {
 
 			add_action('c_purge_cache_on_post_update', function ( $post_id ) {
 				$post = get_post( $post_id );
-				self::purge( ! ( Settings::get( 'purge_everything', 'on', 'c_purge_cache_post_update_settings' ) === 'on' ) ? $post : '' );
+				self::purge( $post );
 			}, 10, 1);
 		}
 	}
@@ -38,6 +38,8 @@ class Purge {
 		if ( ! ( $zone_id || $api_token ) ) {
 			return new WP_Error( 'rest_forbidden', __( 'Fill Cloudflare credentials first.', 'c-purge-cache' ), [ 'status' => 401 ] );
 		}
+
+		$post = ! ( Settings::get( 'purge_everything', 'on', 'c_purge_cache_post_update_settings' ) === 'on' ) ? $post : null;
 
 		$data = [ 'purge_everything' => true ];
 
