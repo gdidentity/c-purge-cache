@@ -42,9 +42,9 @@ class Purge {
 		$post = ! ( Settings::get( 'purge_everything', 'on', 'c_purge_cache_post_update_settings' ) === 'on' ) ? $post : null;
 
 		$data = [ 'purge_everything' => true ];
+		$urls = [];
 
-		if ( $post->ID ) {
-			$urls     = [];
+		if ( $post ) {
 			$page_url = str_replace( get_site_url(), trim( $frontend_url ), get_permalink( $post->ID ) );
 
 			if ( filter_var( $page_url, FILTER_VALIDATE_URL ) ) {
