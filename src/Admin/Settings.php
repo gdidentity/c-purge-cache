@@ -23,10 +23,6 @@ class Settings {
 		add_action( 'admin_menu', [ $this, 'add_options_page' ] );
 		add_action( 'init', [ $this, 'register_settings' ] );
 		add_action( 'admin_init', [ $this, 'initialize_settings_page' ] );
-
-		if ( is_admin() ) {
-			Purge::purgeEverythingButton();
-		}
 	}
 
 
@@ -158,6 +154,10 @@ class Settings {
 	 */
 	public function initialize_settings_page() {
 		$this->settings_api->admin_init();
+
+		if ( is_admin() && current_user_can( 'edit_posts' ) ) {
+			Purge::purgeEverythingButton();
+		}
 	}
 
 	/**
